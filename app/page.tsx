@@ -443,12 +443,12 @@ export default async function LandingPage() {
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:20, alignItems:'stretch' }}>
 
             {/* Left: sin Premium */}
-            <div style={{ background:'rgba(255,255,255,.55)', borderRadius:24, padding:'36px 36px 40px', display:'flex', flexDirection:'column' }}>
-              <div style={{ textAlign:'center', marginBottom:32 }}>
-                <span style={{ fontSize:11, fontWeight:800, letterSpacing:'.1em', textTransform:'uppercase', color:'#8FA3BC', display:'block', marginBottom:8 }}>Plan gratuito</span>
-                <h3 style={{ fontSize:22, fontWeight:800, color:'#0F1C2E' }}>sin Premium</h3>
+            <div style={{ background:'rgba(255,255,255,.55)', borderRadius:24, overflow:'hidden', display:'flex', flexDirection:'column' }}>
+              <div style={{ background:'rgba(255,255,255,.7)', padding:'28px 36px 26px', borderBottom:'1px solid rgba(15,28,46,.06)' }}>
+                <span style={{ fontSize:11, fontWeight:800, letterSpacing:'.1em', textTransform:'uppercase', color:'#8FA3BC', display:'block', marginBottom:6 }}>Plan gratuito</span>
+                <h3 style={{ fontSize:22, fontWeight:800, color:'#0F1C2E', margin:0 }}>sin Premium</h3>
               </div>
-              <div style={{ flex:1 }}>
+              <div style={{ flex:1, padding:'8px 36px 36px' }}>
                 {[
                   { title:'Vinculación de cuentas', desc:'Vincula tus cuentas corrientes, de ahorros, tarjetas de crédito e inversiones para verlo todo en un solo lugar.' },
                   { title:'Alertas de saldo', desc:'Recibe una alerta cuando tu cuenta corriente caiga por debajo de un saldo seguro o cuando tu gasto de crédito sea demasiado alto.' },
