@@ -2,9 +2,9 @@ type Variant = 'light' | 'dark'
 type Size = 'sm' | 'md' | 'lg'
 
 const SIZES: Record<Size, { icon: number; wordmarkH: number; gap: number }> = {
-  sm: { icon: 28, wordmarkH: 14, gap: 8  },
-  md: { icon: 38, wordmarkH: 18, gap: 10 },
-  lg: { icon: 52, wordmarkH: 24, gap: 12 },
+  sm: { icon: 28, wordmarkH: 14, gap: 4 },
+  md: { icon: 38, wordmarkH: 18, gap: 5 },
+  lg: { icon: 52, wordmarkH: 24, gap: 6 },
 }
 
 export function FloowlyIcon({ size = 36 }: { size?: number }) {
