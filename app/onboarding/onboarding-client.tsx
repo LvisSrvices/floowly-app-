@@ -52,58 +52,43 @@ function Icon({ name, size = 20, color = 'currentColor', strokeWidth = 1.8 }: { 
 
 // ── Services marquee ──────────────────────────────────────────────────────────
 
-const SERVICES_ROW1 = [
-  { name: 'Netflix',    file: 'netflix',    bg: '#E50914' },
-  { name: 'Spotify',    file: 'spotify',    bg: '#1DB954' },
-  { name: 'Amazon',     file: 'amazon',     bg: '#FF9900' },
-  { name: 'Disney+',    file: 'disney',     bg: '#113CCF' },
-  { name: 'HBO Max',    file: 'hbo',        bg: '#5822B4' },
-  { name: 'YouTube',    file: 'youtube',    bg: '#FF0000' },
-  { name: 'Adobe',      file: 'adobe',      bg: '#FA0F00' },
-  { name: 'Microsoft',  file: 'microsoft',  bg: '#D83B01' },
-  { name: 'Dropbox',    file: 'dropbox',    bg: '#0061FF' },
-  { name: 'Notion',     file: 'notion',     bg: '#000000' },
-]
-const SERVICES_ROW2 = [
-  { name: 'Twitch',     file: 'twitch',     bg: '#9146FF' },
-  { name: 'Canva',      file: 'canva',      bg: '#7D2AE8' },
-  { name: 'LinkedIn',   file: 'linkedin',   bg: '#0077B5' },
-  { name: 'Slack',      file: 'slack',      bg: '#4A154B' },
-  { name: 'Audible',    file: 'audible',    bg: '#F88F00' },
-  { name: 'DAZN',       file: 'dazn',       bg: '#111111' },
-  { name: 'iCloud',     file: 'icloud',     bg: '#1877F2' },
-  { name: 'Movistar',   file: 'movistar',   bg: '#009BE8' },
-  { name: 'Apple TV',   file: 'appletv',    bg: '#000000' },
-  { name: 'Santander',  file: 'santander',  bg: '#E01022' },
+const ALL_SERVICES = [
+  { name: 'Netflix',   file: 'netflix',   bg: '#E50914' },
+  { name: 'Spotify',   file: 'spotify',   bg: '#1DB954' },
+  { name: 'Amazon',    file: 'amazon',    bg: '#FF9900' },
+  { name: 'Disney+',   file: 'disney',    bg: '#113CCF' },
+  { name: 'HBO Max',   file: 'hbo',       bg: '#5822B4' },
+  { name: 'YouTube',   file: 'youtube',   bg: '#FF0000' },
+  { name: 'Adobe',     file: 'adobe',     bg: '#FA0F00' },
+  { name: 'Microsoft', file: 'microsoft', bg: '#D83B01' },
+  { name: 'Twitch',    file: 'twitch',    bg: '#9146FF' },
+  { name: 'Canva',     file: 'canva',     bg: '#7D2AE8' },
+  { name: 'LinkedIn',  file: 'linkedin',  bg: '#0077B5' },
+  { name: 'Slack',     file: 'slack',     bg: '#4A154B' },
+  { name: 'Audible',   file: 'audible',   bg: '#F88F00' },
+  { name: 'DAZN',      file: 'dazn',      bg: '#111111' },
+  { name: 'iCloud',    file: 'icloud',    bg: '#1877F2' },
+  { name: 'Movistar',  file: 'movistar',  bg: '#009BE8' },
+  { name: 'Notion',    file: 'notion',    bg: '#000000' },
+  { name: 'Dropbox',   file: 'dropbox',   bg: '#0061FF' },
+  { name: 'Santander', file: 'santander', bg: '#E01022' },
+  { name: 'BBVA',      file: 'bbva',      bg: '#004A97' },
 ]
 
-function ServiceTile({ s }: { s: { name: string; file: string; bg: string } }) {
+function ServiceGrid() {
   return (
-    <div style={{ width: 64, height: 64, borderRadius: 16, background: s.bg, flexShrink: 0, overflow: 'hidden', boxShadow: '0 2px 10px rgba(0,0,0,.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <img
-        src={`/services/${s.file}.png`}
-        alt={s.name}
-        width={40}
-        height={40}
-        style={{ objectFit: 'contain', display: 'block' }}
-        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
-      />
-    </div>
-  )
-}
-
-function Marquee() {
-  return (
-    <div style={{ overflow: 'hidden', width: '100%' }}>
-      <style>{`
-        @keyframes mq-l { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-        @keyframes mq-r { from{transform:translateX(-50%)} to{transform:translateX(0)} }
-        .mq-row { display:flex; gap:10px; width:max-content; }
-        .mq-l   { animation:mq-l 24s linear infinite; }
-        .mq-r   { animation:mq-r 28s linear infinite; margin-top:10px; }
-      `}</style>
-      <div className="mq-row mq-l">{[...SERVICES_ROW1,...SERVICES_ROW1].map((s,i)=><ServiceTile key={i} s={s}/>)}</div>
-      <div className="mq-row mq-r">{[...SERVICES_ROW2,...SERVICES_ROW2].map((s,i)=><ServiceTile key={i} s={s}/>)}</div>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: 8 }}>
+      {ALL_SERVICES.map(s => (
+        <div key={s.name} title={s.name}
+          style={{ aspectRatio: '1', borderRadius: 14, background: s.bg, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,.18)' }}>
+          <img
+            src={`/services/${s.file}.png`}
+            alt={s.name}
+            style={{ width: '65%', height: '65%', objectFit: 'contain', display: 'block' }}
+            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+          />
+        </div>
+      ))}
     </div>
   )
 }
@@ -433,69 +418,95 @@ export default function OnboardingClient({ user }: { user: { id: string; email: 
 
         {/* ══ Step 3: Conecta tus cuentas ════════════════════════════════ */}
         {step === 3 && (
-          <div style={{ maxWidth: 900, width: '100%', display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: 56, alignItems: 'center' }}>
-            <div>
-              <div style={{ marginBottom: 28, overflow: 'hidden', borderRadius: 16 }}><Marquee/></div>
-              <h2 style={{ fontSize: 32, fontWeight: 900, color: '#0A1629', letterSpacing: '-.04em', lineHeight: 1.1, marginBottom: 12 }}>
-                Conecta tus cuentas
-              </h2>
-              <p style={{ fontSize: 15, color: '#475569', lineHeight: 1.7, marginBottom: 20 }}>
-                Detectaremos todas tus suscripciones y encontraremos formas de ahorrarte dinero cada mes.
-              </p>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#F8FAFC', border: '1px solid #E5E9F0', borderRadius: 20, padding: '8px 16px' }}>
-                <Icon name="lock" size={13} color="#475569"/>
-                <span style={{ fontSize: 12, color: '#475569', fontWeight: 500 }}>Cifrado bancario de 256 bits</span>
+          <div style={{ maxWidth: 760, width: '100%' }}>
+            {/* Logo grid */}
+            <div style={{ marginBottom: 32 }}>
+              <ServiceGrid/>
+            </div>
+
+            {/* Title row */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 24, alignItems: 'flex-end', marginBottom: 24 }}>
+              <div>
+                <h2 style={{ fontSize: 28, fontWeight: 900, color: '#0A1629', letterSpacing: '-.04em', lineHeight: 1.1, marginBottom: 8 }}>
+                  Conecta tus cuentas
+                </h2>
+                <p style={{ fontSize: 14, color: '#475569', lineHeight: 1.65, margin: 0 }}>
+                  Detectamos todas tus suscripciones y encontramos formas de ahorrarte dinero cada mes.
+                </p>
+              </div>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#F8FAFC', border: '1px solid #E5E9F0', borderRadius: 20, padding: '7px 14px', whiteSpace: 'nowrap' }}>
+                <Icon name="lock" size={13} color="#64748B"/>
+                <span style={{ fontSize: 12, color: '#64748B', fontWeight: 500 }}>Cifrado de 256 bits</span>
               </div>
             </div>
 
-            <div>
-              {csvStatus === 'error' && (
-                <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 10, padding: '10px 14px', marginBottom: 12, fontSize: 13, color: '#DC2626' }}>{csvMessage}</div>
-              )}
+            {/* Connection cards */}
+            {csvStatus === 'error' && (
+              <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 10, padding: '10px 14px', marginBottom: 12, fontSize: 13, color: '#DC2626' }}>{csvMessage}</div>
+            )}
 
-              {/* Bank */}
-              <div style={{ background: '#fff', borderRadius: 14, border: `1.5px solid ${bankAdded ? ACCENT : '#E5E9F0'}`, padding: '18px 20px', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 14, boxShadow: bankAdded ? `0 0 0 3px ${AL}` : '0 1px 4px rgba(0,0,0,.05)' }}>
-                <div style={{ width: 44, height: 44, borderRadius: 12, background: bankAdded ? AL : '#F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <Icon name="bank" size={20} color={bankAdded ? ACCENT : '#64748B'}/>
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
-                    <span style={{ fontSize: 14, fontWeight: 700, color: '#0A1629' }}>Extracto bancario</span>
-                    {!bankAdded && <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 7px', borderRadius: 20, background: AL, color: ACCENT }}>RECOMENDADO</span>}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
+              {/* Bank card */}
+              <div style={{ background: '#fff', borderRadius: 16, border: `1.5px solid ${bankAdded ? ACCENT : '#E5E9F0'}`, padding: '20px', boxShadow: bankAdded ? `0 0 0 3px ${AL}` : '0 1px 4px rgba(0,0,0,.05)', display: 'flex', flexDirection: 'column', gap: 14 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ width: 44, height: 44, borderRadius: 12, background: bankAdded ? AL : '#F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Icon name="bank" size={20} color={bankAdded ? ACCENT : '#64748B'}/>
                   </div>
-                  <div style={{ fontSize: 12, color: '#94A3B8' }}>{bankAdded ? csvMessage : 'CSV o Excel · BBVA, Santander, CaixaBank, ING…'}</div>
-                </div>
-                {bankAdded ? (
-                  <div style={{ width: 28, height: 28, borderRadius: '50%', background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Icon name="check" size={12} color="#fff" strokeWidth={3}/>
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: '#0A1629', marginBottom: 3 }}>Extracto bancario</div>
+                    <div style={{ fontSize: 12, color: '#94A3B8' }}>{bankAdded ? csvMessage : 'CSV · BBVA, Santander, CaixaBank…'}</div>
                   </div>
-                ) : (
-                  <label style={{ fontSize: 13, fontWeight: 700, color: ACCENT, background: AL, border: `1px solid ${ACCENT}`, borderRadius: 8, padding: '7px 14px', cursor: 'pointer', flexShrink: 0, whiteSpace: 'nowrap' }}>
-                    Añadir
-                    <input ref={fileCsvRef} type="file" accept=".csv,.xls,.xlsx,.txt" style={{ display: 'none' }} onChange={handleCsvUpload}/>
-                  </label>
-                )}
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 20, background: bankAdded ? AL : '#FEF9C3', color: bankAdded ? ACCENT : '#854D0E' }}>
+                    {bankAdded ? 'Conectado' : 'Recomendado'}
+                  </span>
+                  {bankAdded ? (
+                    <div style={{ width: 28, height: 28, borderRadius: '50%', background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Icon name="check" size={12} color="#fff" strokeWidth={3}/>
+                    </div>
+                  ) : (
+                    <label style={{ fontSize: 13, fontWeight: 700, color: '#fff', background: ACCENT, border: 'none', borderRadius: 9, padding: '8px 18px', cursor: 'pointer' }}>
+                      Añadir
+                      <input ref={fileCsvRef} type="file" accept=".csv,.xls,.xlsx,.txt" style={{ display: 'none' }} onChange={handleCsvUpload}/>
+                    </label>
+                  )}
+                </div>
               </div>
 
-              {/* Gmail */}
-              <div style={{ background: '#fff', borderRadius: 14, border: `1.5px solid ${gmailAdded ? ACCENT : '#E5E9F0'}`, padding: '18px 20px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 14, boxShadow: '0 1px 4px rgba(0,0,0,.05)' }}>
-                <div style={{ width: 44, height: 44, borderRadius: 12, background: '#FEF2F2', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <Icon name="mail" size={20} color="#DC2626"/>
+              {/* Gmail card */}
+              <div style={{ background: '#fff', borderRadius: 16, border: `1.5px solid ${gmailAdded ? ACCENT : '#E5E9F0'}`, padding: '20px', boxShadow: gmailAdded ? `0 0 0 3px ${AL}` : '0 1px 4px rgba(0,0,0,.05)', display: 'flex', flexDirection: 'column', gap: 14 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ width: 44, height: 44, borderRadius: 12, background: '#FEF2F2', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Icon name="mail" size={20} color="#DC2626"/>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: '#0A1629', marginBottom: 3 }}>Gmail</div>
+                    <div style={{ fontSize: 12, color: '#94A3B8' }}>{gmailAdded ? 'Cuenta conectada' : 'Facturas y confirmaciones'}</div>
+                  </div>
                 </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: '#0A1629', marginBottom: 3 }}>Gmail</div>
-                  <div style={{ fontSize: 12, color: '#94A3B8' }}>Detecta facturas y confirmaciones de pago</div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 20, background: gmailAdded ? AL : '#F1F5F9', color: gmailAdded ? ACCENT : '#64748B' }}>
+                    {gmailAdded ? 'Conectado' : 'Opcional'}
+                  </span>
+                  {gmailAdded ? (
+                    <div style={{ width: 28, height: 28, borderRadius: '50%', background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Icon name="check" size={12} color="#fff" strokeWidth={3}/>
+                    </div>
+                  ) : (
+                    <button onClick={() => setGmailAdded(true)} style={{ fontSize: 13, fontWeight: 700, color: '#fff', background: '#0A1629', border: 'none', borderRadius: 9, padding: '8px 18px', cursor: 'pointer' }}>
+                      Añadir
+                    </button>
+                  )}
                 </div>
-                <button onClick={() => setGmailAdded(true)} style={{ fontSize: 13, fontWeight: 700, color: ACCENT, background: AL, border: `1px solid ${ACCENT}`, borderRadius: 8, padding: '7px 14px', cursor: 'pointer', flexShrink: 0 }}>
-                  {gmailAdded ? 'Añadido' : 'Añadir'}
-                </button>
               </div>
-
-              <button onClick={() => setStep(4)} style={primaryBtn}>Continuar</button>
-              <p style={{ textAlign: 'center', marginTop: 10, margin: '10px 0 0' }}>
-                <button onClick={() => setStep(4)} style={{ fontSize: 12, color: '#94A3B8', background: 'none', border: 'none', cursor: 'pointer' }}>Omitir por ahora</button>
-              </p>
             </div>
+
+            {/* Continue */}
+            <button onClick={() => setStep(4)} style={{ ...primaryBtn, marginBottom: 12 }}>Continuar</button>
+            <p style={{ textAlign: 'center', margin: 0 }}>
+              <button onClick={() => setStep(4)} style={{ fontSize: 13, color: '#94A3B8', background: 'none', border: 'none', cursor: 'pointer' }}>Omitir por ahora</button>
+            </p>
           </div>
         )}
 
