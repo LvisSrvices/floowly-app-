@@ -45,7 +45,7 @@ export async function middleware(request: NextRequest) {
     }
 
     // Not done onboarding and not already on /onboarding → redirect there
-    if (!onboardingDone && pathname !== '/onboarding') {
+    if (!onboardingDone && !pathname.startsWith('/onboarding') && !pathname.startsWith('/api/')) {
       return NextResponse.redirect(new URL('/onboarding', request.url))
     }
   }
