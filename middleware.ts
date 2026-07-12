@@ -24,15 +24,30 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
   const { pathname } = request.nextUrl
 
-  const publicPaths = ['/', '/login']
-  const isPublic = publicPaths.some(p => pathname === p || pathname.startsWith('/api/auth'))
+  const isPublic = pathname === '/' || pathname === '/login' || pathname.startsWith('/api/auth')
 
+  // Not logged in → send to login (except public paths)
   if (!user && !isPublic) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  if (user && (pathname === '/login' || pathname === '/')) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
+  if (user) {
+    const onboardingDone = user.user_metadata?.onboarding_completed === true
+
+    // Logged-in user on login page → redirect appropriately
+    if (pathname === '/login') {
+      return NextResponse.redirect(new URL(onboardingDone ? '/dashboard' : '/onboarding', request.url))
+    }
+
+    // Landing page → dashboard
+    if (pathname === '/') {
+      return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
+
+    // Not done onboarding and not already on /onboarding → redirect there
+    if (!onboardingDone && pathname !== '/onboarding') {
+      return NextResponse.redirect(new URL('/onboarding', request.url))
+    }
   }
 
   return supabaseResponse
