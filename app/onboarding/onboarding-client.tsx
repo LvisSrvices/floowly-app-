@@ -125,14 +125,135 @@ const SPEND_OPTIONS = [
   { id: '100+',   label: 'Más de 100€ / mes' },
 ]
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+// ── Premium Step (Stripe Checkout) ────────────────────────────────────────────
 
-function formatCard(v: string) {
-  return v.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim()
-}
-function formatExpiry(v: string) {
-  const d = v.replace(/\D/g, '').slice(0, 4)
-  return d.length > 2 ? `${d.slice(0,2)}/${d.slice(2)}` : d
+function PremiumStep({ onSkip, onSuccess }: { onSkip: () => void; onSuccess: () => void }) {
+  const [loading, setLoading] = useState(false)
+  const [err, setErr]         = useState('')
+
+  async function startCheckout() {
+    setLoading(true)
+    setErr('')
+    try {
+      const res  = await fetch('/api/stripe/checkout', { method: 'POST' })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      window.location.href = data.url
+    } catch (e: any) {
+      setErr(e.message || 'Error al iniciar el pago')
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div style={{ maxWidth: 900, width: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'start' }}>
+      {/* Left: features */}
+      <div>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'linear-gradient(135deg,#0f9b8e,#0c7a6f)', borderRadius: 20, padding: '6px 14px', marginBottom: 20 }}>
+          <Icon name="star" size={12} color="#fff" strokeWidth={2}/>
+          <span style={{ fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: '.05em' }}>PLAN PREMIUM</span>
+        </div>
+        <h2 style={{ fontSize: 32, fontWeight: 900, color: '#0A1629', letterSpacing: '-.04em', lineHeight: 1.1, marginBottom: 14 }}>
+          Desbloquea el<br/>control total
+        </h2>
+        <p style={{ fontSize: 15, color: '#475569', lineHeight: 1.7, marginBottom: 24 }}>
+          Los usuarios Premium ahorran de media <strong style={{ color: '#0A1629' }}>87€ al mes</strong>. El plan se paga solo.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          {PREMIUM_FEATURES.map(f => (
+            <div key={f.title} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+              <div style={{ width: 34, height: 34, borderRadius: 9, background: AL, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+                <Icon name={f.iconName} size={16} color={ACCENT}/>
+              </div>
+              <div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: '#0A1629', marginBottom: 2 }}>{f.title}</div>
+                <div style={{ fontSize: 12, color: '#475569', lineHeight: 1.5 }}>{f.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Right: Stripe checkout card */}
+      <div style={{ background: '#fff', borderRadius: 18, border: '1px solid #E5E9F0', padding: '32px', boxShadow: '0 4px 24px rgba(0,0,0,.07)' }}>
+        {/* Price */}
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ fontSize: 38, fontWeight: 900, color: '#0A1629', letterSpacing: '-.04em', lineHeight: 1 }}>
+            3,99€<span style={{ fontSize: 16, fontWeight: 500, color: '#94A3B8' }}>/mes</span>
+          </div>
+          <div style={{ fontSize: 14, color: '#475569', marginTop: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <Icon name="check" size={14} color={ACCENT} strokeWidth={2.5}/>
+            30 días gratis incluidos · Sin compromiso
+          </div>
+        </div>
+
+        {/* What's included mini-list */}
+        <div style={{ background: '#F8FAFC', borderRadius: 12, padding: '16px', marginBottom: 24 }}>
+          {[
+            'Cancelación automática con un clic',
+            'IA que negocia mejores precios',
+            'Detección ilimitada de suscripciones',
+            'Alertas antes de cada cargo',
+          ].map(item => (
+            <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#0A1629', marginBottom: 8 }}>
+              <div style={{ width: 18, height: 18, borderRadius: '50%', background: AL, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Icon name="check" size={9} color={ACCENT} strokeWidth={3}/>
+              </div>
+              {item}
+            </div>
+          ))}
+        </div>
+
+        {err && (
+          <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 10, padding: '10px 14px', marginBottom: 16, fontSize: 13, color: '#DC2626' }}>{err}</div>
+        )}
+
+        {/* Stripe button */}
+        <button
+          onClick={startCheckout}
+          disabled={loading}
+          style={{ width: '100%', padding: '15px', borderRadius: 12, border: 'none', background: loading ? '#64748B' : '#0A1629', color: '#fff', fontSize: 15, fontWeight: 700, cursor: loading ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 14, transition: 'background .15s' }}>
+          {loading ? (
+            <>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'spin 1s linear infinite' }}><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+              Redirigiendo…
+            </>
+          ) : (
+            <>
+              <Icon name="creditcard" size={16} color="#fff"/>
+              Empezar prueba gratuita
+            </>
+          )}
+        </button>
+        <style>{`@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}`}</style>
+
+        {/* Trust badges */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, marginBottom: 20 }}>
+          {[
+            { icon: 'lock',   label: 'Pago seguro' },
+            { icon: 'shield', label: 'Sin cargos hasta el día 31' },
+          ].map(b => (
+            <div key={b.label} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: '#94A3B8' }}>
+              <Icon name={b.icon} size={12} color="#94A3B8"/>
+              {b.label}
+            </div>
+          ))}
+        </div>
+
+        {/* Stripe logo area */}
+        <div style={{ borderTop: '1px solid #F1F5F9', paddingTop: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: 11, color: '#CBD5E1' }}>Procesado de forma segura por</span>
+          <span style={{ fontSize: 13, fontWeight: 800, color: '#635BFF', letterSpacing: '-.02em' }}>stripe</span>
+        </div>
+
+        <div style={{ marginTop: 16, textAlign: 'center' }}>
+          <button onClick={onSkip} style={{ fontSize: 13, color: '#94A3B8', background: 'none', border: 'none', cursor: 'pointer' }}>
+            Continuar con el plan gratuito
+          </button>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
@@ -159,11 +280,7 @@ export default function OnboardingClient({ user }: { user: { id: string; email: 
   const [bankAdded, setBankAdded]   = useState(false)
   const [gmailAdded, setGmailAdded] = useState(false)
 
-  // Step 4 – premium
-  const [cardNum, setCardNum]       = useState('')
-  const [cardName, setCardName]     = useState('')
-  const [cardExpiry, setCardExpiry] = useState('')
-  const [cardCvv, setCardCvv]       = useState('')
+  // Step 4 – premium (handled by PremiumStep component)
 
   const fileAvatarRef = useRef<HTMLInputElement>(null)
   const fileCsvRef    = useRef<HTMLInputElement>(null)
@@ -512,104 +629,7 @@ export default function OnboardingClient({ user }: { user: { id: string; email: 
 
         {/* ══ Step 4: Plan Premium ═════════════════════════════════════════ */}
         {step === 4 && (
-          <div style={{ maxWidth: 900, width: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'start' }}>
-            {/* Left: features */}
-            <div>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'linear-gradient(135deg,#0f9b8e,#0c7a6f)', borderRadius: 20, padding: '6px 14px', marginBottom: 20 }}>
-                <Icon name="star" size={12} color="#fff" strokeWidth={2}/>
-                <span style={{ fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: '.05em' }}>PLAN PREMIUM</span>
-              </div>
-              <h2 style={{ fontSize: 32, fontWeight: 900, color: '#0A1629', letterSpacing: '-.04em', lineHeight: 1.1, marginBottom: 14 }}>
-                Desbloquea el<br/>control total
-              </h2>
-              <p style={{ fontSize: 15, color: '#475569', lineHeight: 1.7, marginBottom: 24 }}>
-                Los usuarios Premium ahorran de media <strong style={{ color: '#0A1629' }}>87€ al mes</strong>. El plan se paga solo.
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                {PREMIUM_FEATURES.map(f => (
-                  <div key={f.title} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                    <div style={{ width: 34, height: 34, borderRadius: 9, background: AL, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
-                      <Icon name={f.iconName} size={16} color={ACCENT}/>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: 14, fontWeight: 700, color: '#0A1629', marginBottom: 2 }}>{f.title}</div>
-                      <div style={{ fontSize: 12, color: '#475569', lineHeight: 1.5 }}>{f.desc}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Right: card form */}
-            <div style={{ background: '#fff', borderRadius: 18, border: '1px solid #E5E9F0', padding: '28px', boxShadow: '0 4px 20px rgba(0,0,0,.06)' }}>
-              <div style={{ marginBottom: 22 }}>
-                <div style={{ fontSize: 22, fontWeight: 900, color: '#0A1629', letterSpacing: '-.03em' }}>
-                  3,99€<span style={{ fontSize: 14, fontWeight: 500, color: '#94A3B8' }}> / mes</span>
-                </div>
-                <div style={{ fontSize: 13, color: '#475569', marginTop: 4 }}>30 días gratis · Cancela cuando quieras</div>
-              </div>
-
-              <div style={{ background: 'linear-gradient(135deg,#0f9b8e,#0c6e64)', borderRadius: 14, padding: '20px', marginBottom: 22, position: 'relative', overflow: 'hidden' }}>
-                <div style={{ position: 'absolute', top: -20, right: -20, width: 100, height: 100, borderRadius: '50%', background: 'rgba(255,255,255,.06)' }}/>
-                <div style={{ position: 'absolute', bottom: -30, right: 20, width: 80, height: 80, borderRadius: '50%', background: 'rgba(255,255,255,.04)' }}/>
-                <div style={{ fontSize: 12, color: 'rgba(255,255,255,.6)', marginBottom: 16 }}>Número de tarjeta</div>
-                <div style={{ fontSize: 18, fontWeight: 700, color: '#fff', letterSpacing: '.1em', marginBottom: 16, fontVariantNumeric: 'tabular-nums' }}>
-                  {cardNum || '•••• •••• •••• ••••'}
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <div>
-                    <div style={{ fontSize: 10, color: 'rgba(255,255,255,.5)', marginBottom: 2 }}>TITULAR</div>
-                    <div style={{ fontSize: 13, color: '#fff', fontWeight: 600 }}>{cardName || '—'}</div>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: 10, color: 'rgba(255,255,255,.5)', marginBottom: 2 }}>CADUCA</div>
-                    <div style={{ fontSize: 13, color: '#fff', fontWeight: 600 }}>{cardExpiry || 'MM/AA'}</div>
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <div>
-                  <label style={labelStyle}>NÚMERO DE TARJETA</label>
-                  <div style={{ position: 'relative' }}>
-                    <input style={{ ...inputStyle, paddingLeft: 38 }} value={cardNum} onChange={e => setCardNum(formatCard(e.target.value))} placeholder="1234 5678 9012 3456" onFocus={e => (e.target.style.borderColor = ACCENT)} onBlur={e => (e.target.style.borderColor = '#E5E9F0')}/>
-                    <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }}>
-                      <Icon name="creditcard" size={16} color="#94A3B8"/>
-                    </span>
-                  </div>
-                </div>
-                <div>
-                  <label style={labelStyle}>NOMBRE EN LA TARJETA</label>
-                  <input style={inputStyle} value={cardName} onChange={e => setCardName(e.target.value)} placeholder="Luis Martínez" onFocus={e => (e.target.style.borderColor = ACCENT)} onBlur={e => (e.target.style.borderColor = '#E5E9F0')}/>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                  <div>
-                    <label style={labelStyle}>FECHA DE CADUCIDAD</label>
-                    <input style={inputStyle} value={cardExpiry} onChange={e => setCardExpiry(formatExpiry(e.target.value))} placeholder="MM/AA" onFocus={e => (e.target.style.borderColor = ACCENT)} onBlur={e => (e.target.style.borderColor = '#E5E9F0')}/>
-                  </div>
-                  <div>
-                    <label style={labelStyle}>CVV</label>
-                    <input style={inputStyle} type="password" maxLength={4} value={cardCvv} onChange={e => setCardCvv(e.target.value.replace(/\D/g,'').slice(0,4))} placeholder="•••" onFocus={e => (e.target.style.borderColor = ACCENT)} onBlur={e => (e.target.style.borderColor = '#E5E9F0')}/>
-                  </div>
-                </div>
-
-                <button onClick={() => setStep(5)} style={primaryBtn}>
-                  Empezar prueba gratuita
-                </button>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
-                  <Icon name="lock" size={12} color="#94A3B8"/>
-                  <span style={{ fontSize: 11, color: '#94A3B8' }}>Pago seguro · No se cobra hasta el día 31</span>
-                </div>
-              </div>
-
-              <div style={{ borderTop: '1px solid #F1F5F9', marginTop: 16, paddingTop: 14, textAlign: 'center' }}>
-                <button onClick={() => setStep(5)} style={{ fontSize: 13, color: '#94A3B8', background: 'none', border: 'none', cursor: 'pointer' }}>
-                  Continuar con el plan gratuito
-                </button>
-              </div>
-            </div>
-          </div>
+          <PremiumStep onSkip={() => setStep(5)} onSuccess={() => setStep(5)} />
         )}
 
         {/* ══ Step 5: Activar ════════════════════════════════════════════ */}
