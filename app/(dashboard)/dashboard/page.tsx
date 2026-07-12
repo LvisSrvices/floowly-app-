@@ -25,7 +25,7 @@ export default async function DashboardPage({
 
   return (
     <DashboardClient
-      user={{ id: user.id, email: user.email! }}
+      user={{ id: user.id, email: user.email!, user_metadata: user.user_metadata }}
       subscriptions={subscriptions || []}
       hasGmail={hasGmail}
       totalMonthly={totalMonthly}

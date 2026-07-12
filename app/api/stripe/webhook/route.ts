@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
       break
     }
     case 'checkout.session.completed': {
-      const session = event.data.object as Stripe.CheckoutSession
+      const session = event.data.object as Stripe.Checkout.Session
       if (session.mode === 'subscription' && session.subscription) {
         const sub = await stripe.subscriptions.retrieve(session.subscription as string)
         const active = ['active', 'trialing'].includes(sub.status)
