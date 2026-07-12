@@ -80,11 +80,11 @@ function ServiceGrid() {
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: 8 }}>
       {ALL_SERVICES.map(s => (
         <div key={s.name} title={s.name}
-          style={{ aspectRatio: '1', borderRadius: 14, background: s.bg, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,.18)' }}>
+          style={{ aspectRatio: '1', borderRadius: 14, background: '#fff', border: '1px solid #E5E9F0', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 4px rgba(0,0,0,.06)' }}>
           <img
             src={`/services/${s.file}.png`}
             alt={s.name}
-            style={{ width: '65%', height: '65%', objectFit: 'contain', display: 'block' }}
+            style={{ width: '60%', height: '60%', objectFit: 'contain', display: 'block' }}
             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
           />
         </div>
