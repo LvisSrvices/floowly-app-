@@ -24,7 +24,7 @@ export function createServerClient() {
 export function createServiceClient() {
   return _createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICEKEY)!,
     { cookies: { getAll: () => [], setAll: () => {} } }
   )
 }
