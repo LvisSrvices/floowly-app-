@@ -1,5 +1,3 @@
-// Shared Floowly Money logo component — icon from brand SVG concept
-
 type Variant = 'light' | 'dark'
 type Size = 'sm' | 'md' | 'lg'
 
@@ -11,43 +9,13 @@ const SIZES: Record<Size, { box: number; name: number; sub: number; gap: number 
 
 export function FloowlyIcon({ size = 36 }: { size?: number }) {
   return (
-    <svg
+    <img
+      src="/logo.png"
+      alt="Floowly"
       width={size}
       height={size}
-      viewBox="0 0 120 120"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      {/* Background rounded square */}
-      <rect width="120" height="120" rx="28" fill="#0f9b8e" />
-
-      {/* Flow wave line */}
-      <path
-        d="M24 80 C 44 40, 64 40, 76 60 C 84 74, 92 74, 100 58"
-        stroke="#eef5f4"
-        strokeWidth="7"
-        strokeLinecap="round"
-        fill="none"
-      />
-
-      {/* Coin circle */}
-      <circle cx="100" cy="58" r="10" fill="#eef5f4" />
-
-      {/* Dollar sign inside coin */}
-      <text
-        x="100"
-        y="58"
-        textAnchor="middle"
-        dominantBaseline="central"
-        fontSize="13"
-        fill="#0f9b8e"
-        fontWeight="700"
-        fontFamily="system-ui, -apple-system, sans-serif"
-      >
-        $
-      </text>
-    </svg>
+      style={{ display: 'block', objectFit: 'contain' }}
+    />
   )
 }
 
