@@ -1,10 +1,10 @@
 type Variant = 'light' | 'dark'
 type Size = 'sm' | 'md' | 'lg'
 
-const SIZES: Record<Size, { box: number; name: number; sub: number; gap: number }> = {
-  sm: { box: 28, name: 13, sub: 8,  gap: 8  },
-  md: { box: 36, name: 15, sub: 9,  gap: 10 },
-  lg: { box: 46, name: 20, sub: 11, gap: 12 },
+const SIZES: Record<Size, { icon: number; wordmark: number; gap: number }> = {
+  sm: { icon: 28, wordmark: 72,  gap: 8  },
+  md: { icon: 38, wordmark: 96,  gap: 10 },
+  lg: { icon: 52, wordmark: 128, gap: 12 },
 }
 
 export function FloowlyIcon({ size = 36 }: { size?: number }) {
@@ -14,7 +14,7 @@ export function FloowlyIcon({ size = 36 }: { size?: number }) {
       alt="Floowly"
       width={size}
       height={size}
-      style={{ display: 'block', objectFit: 'contain' }}
+      style={{ display: 'block', objectFit: 'contain', flexShrink: 0 }}
     />
   )
 }
@@ -27,34 +27,22 @@ export default function FloowlyLogo({
   size?: Size
 }) {
   const s = SIZES[size]
-  const nameColor = variant === 'dark' ? '#fff' : '#0F1C2E'
-  const moneyColor = variant === 'dark' ? '#5eead4' : '#0f9b8e'
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: s.gap }}>
-      <FloowlyIcon size={s.box} />
-      <div style={{ lineHeight: 1 }}>
-        <div style={{
-          fontSize: s.name,
-          fontWeight: 900,
-          color: nameColor,
-          letterSpacing: '-.03em',
-          lineHeight: 1,
-          fontFamily: "-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', system-ui, sans-serif",
-        }}>
-          floowly
-        </div>
-        <div style={{
-          fontSize: s.sub,
-          fontWeight: 700,
-          color: moneyColor,
-          letterSpacing: '.1em',
-          textTransform: 'uppercase' as const,
-          marginTop: 2,
-        }}>
-          money
-        </div>
-      </div>
+      <FloowlyIcon size={s.icon} />
+      <img
+        src="/wordmark.png"
+        alt="Floowly Money"
+        height={s.icon * 0.55}
+        style={{
+          display: 'block',
+          objectFit: 'contain',
+          objectPosition: 'left center',
+          filter: variant === 'dark' ? 'brightness(0) invert(1)' : 'none',
+          opacity: variant === 'dark' ? 0.9 : 1,
+        }}
+      />
     </div>
   )
 }

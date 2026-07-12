@@ -57,7 +57,7 @@ export default async function LandingPage() {
       <nav style={{ position:'sticky', top:0, zIndex:100, background:'rgba(255,255,255,.97)', backdropFilter:'blur(14px)', WebkitBackdropFilter:'blur(14px)', borderBottom:'1px solid #E2E8F2', height:72, display:'flex', alignItems:'center', padding:'0 clamp(20px,5vw,72px)', justifyContent:'space-between', gap:24 }}>
 
         {/* Left: Logo */}
-        <Link href="/" style={{ textDecoration:'none', flexShrink:0 }}>
+        <Link href="/" style={{ textDecoration:'none', flexShrink:0, marginLeft:16 }}>
           <FloowlyLogo size="lg" variant="light" />
         </Link>
 
@@ -113,7 +113,7 @@ export default async function LandingPage() {
 
       {/* ── Hero ────────────────────────────────────────────────────── */}
       <section style={{ background:'linear-gradient(155deg, #091624 0%, #0C2318 60%, #091624 100%)', padding:'clamp(64px,10vw,108px) clamp(20px,5vw,80px)', display:'flex', alignItems:'center' }}>
-        <div className="hero-grid" style={{ maxWidth:1240, margin:'0 auto', width:'100%', display:'grid', gridTemplateColumns:'1fr 1fr', gap:72, alignItems:'center' }}>
+        <div className="hero-grid" style={{ maxWidth:1240, margin:'0 auto', width:'100%', display:'grid', gridTemplateColumns:'5fr 7fr', gap:56, alignItems:'center' }}>
 
           {/* Left */}
           <div>
@@ -834,68 +834,94 @@ function AppMockup() {
     { name:'Spotify',       cat:'Música',    price:'10.99€', color:'#1DB954', initials:'SP' },
     { name:'Adobe CC',      cat:'Software',  price:'29.99€', color:'#FF0000', initials:'AD' },
     { name:'Microsoft 365', cat:'Software',  price:'8.99€',  color:'#0078D4', initials:'MS' },
-    { name:'Amazon Prime',  cat:'Streaming', price:'6.99€',  color:'#FF9900', initials:'AP' },
   ]
   return (
-    <div style={{ background:'#fff', borderRadius:20, border:'1px solid rgba(255,255,255,.08)', boxShadow:'0 28px 80px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.06)', overflow:'hidden', width:348, maxWidth:'100%' }}>
-      <div style={{ display:'flex', height:440 }}>
-        {/* Sidebar strip */}
-        <div style={{ width:46, background:'#F8FAFD', borderRight:'1px solid #E2E8F2', display:'flex', flexDirection:'column', alignItems:'center', padding:'14px 0', gap:14 }}>
-          <FloowlyIcon size={30} />
-          {[
-            <svg key="d" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0f9b8e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>,
-            <svg key="r" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B0BFCC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>,
-            <svg key="g" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B0BFCC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
-            <svg key="c" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B0BFCC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>,
-          ].map((icon, i) => (
-            <div key={i} style={{ width:32, height:32, borderRadius:8, background:i===0?'#e8f7f6':'transparent', display:'flex', alignItems:'center', justifyContent:'center' }}>
-              {icon}
-            </div>
+    <div style={{ background:'#fff', borderRadius:20, boxShadow:'0 28px 80px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.08)', overflow:'hidden', width:'100%', maxWidth:620 }}>
+      {/* Top bar */}
+      <div style={{ background:'#F8FAFD', borderBottom:'1px solid #E2E8F2', padding:'10px 16px', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+          <FloowlyIcon size={22} />
+          <span style={{ fontSize:11, fontWeight:800, color:'#0F1C2E', letterSpacing:'-.01em' }}>Floowly Dashboard</span>
+        </div>
+        <div style={{ display:'flex', gap:12 }}>
+          {['Suscripciones','Gastos','Patrimonio','Presupuesto'].map((t,i) => (
+            <span key={t} style={{ fontSize:9, fontWeight:700, color: i===0 ? '#0f9b8e' : '#B0BFCC', cursor:'pointer', paddingBottom:2, borderBottom: i===0 ? '1.5px solid #0f9b8e' : 'none' }}>{t}</span>
           ))}
         </div>
+      </div>
 
-        {/* Main */}
-        <div style={{ flex:1, background:'#F8FAFD', padding:14, overflow:'hidden' }}>
-          <div style={{ fontSize:11, fontWeight:800, color:'#0F1C2E', marginBottom:12, letterSpacing:'-.01em' }}>Dashboard</div>
-
-          {/* Stats */}
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:7, marginBottom:16 }}>
+      {/* Body */}
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:0 }}>
+        {/* Left panel */}
+        <div style={{ padding:14, borderRight:'1px solid #EDF2FA' }}>
+          {/* Stats row */}
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:6, marginBottom:12 }}>
             {[
               { l:'Activas', v:'7',      c:'#0F1C2E' },
               { l:'Mensual', v:'87€',    c:'#DC2626' },
-              { l:'Anual',   v:'1.049€', c:'#D97706' },
+              { l:'Ahorro',  v:'43€',    c:'#0f9b8e' },
             ].map(s => (
-              <div key={s.l} style={{ background:'#fff', borderRadius:9, padding:'9px 10px', border:'1px solid #E2E8F2' }}>
-                <div style={{ fontSize:8, fontWeight:700, color:'#8FA3BC', textTransform:'uppercase', marginBottom:4 }}>{s.l}</div>
-                <div style={{ fontSize:13, fontWeight:800, color:s.c, letterSpacing:'-.02em' }}>{s.v}</div>
+              <div key={s.l} style={{ background:'#F8FAFD', borderRadius:8, padding:'8px 9px', border:'1px solid #E2E8F2' }}>
+                <div style={{ fontSize:7.5, fontWeight:700, color:'#8FA3BC', textTransform:'uppercase', marginBottom:3 }}>{s.l}</div>
+                <div style={{ fontSize:14, fontWeight:800, color:s.c, letterSpacing:'-.02em' }}>{s.v}</div>
               </div>
             ))}
           </div>
 
           {/* Savings callout */}
-          <div style={{ background:'#e8f7f6', border:'1px solid #A7F3D0', borderRadius:9, padding:'9px 11px', marginBottom:14, display:'flex', alignItems:'center', gap:8 }}>
-            <span style={{ fontSize:14 }}>💡</span>
+          <div style={{ background:'#e8f7f6', border:'1px solid #A7F3D0', borderRadius:8, padding:'8px 10px', marginBottom:12, display:'flex', alignItems:'center', gap:7 }}>
+            <span style={{ fontSize:13 }}>💡</span>
             <div>
-              <div style={{ fontSize:9, fontWeight:800, color:'#0f9b8e' }}>OPORTUNIDAD DE AHORRO</div>
-              <div style={{ fontSize:9, color:'#0c5249', marginTop:1 }}>Podrías ahorrar 43€/mes cancelando 2 apps</div>
+              <div style={{ fontSize:8.5, fontWeight:800, color:'#0f9b8e' }}>OPORTUNIDAD DE AHORRO</div>
+              <div style={{ fontSize:8, color:'#0c5249', marginTop:1 }}>Podrías ahorrar 43€/mes cancelando 2 apps</div>
             </div>
           </div>
 
           {/* Sub list */}
-          <div style={{ fontSize:9, fontWeight:700, color:'#8FA3BC', textTransform:'uppercase', letterSpacing:'.07em', marginBottom:8 }}>Suscripciones activas</div>
-          <div style={{ display:'flex', flexDirection:'column', gap:5 }}>
+          <div style={{ fontSize:8, fontWeight:700, color:'#8FA3BC', textTransform:'uppercase', letterSpacing:'.07em', marginBottom:7 }}>Suscripciones activas</div>
+          <div style={{ display:'flex', flexDirection:'column', gap:4 }}>
             {subs.map(s => (
-              <div key={s.name} style={{ display:'flex', alignItems:'center', gap:8, padding:'7px 10px', background:'#fff', borderRadius:9, border:'1px solid #E2E8F2' }}>
-                <div style={{ width:3, height:26, borderRadius:2, background:s.color, flexShrink:0 }} />
-                <div style={{ width:24, height:24, borderRadius:6, background:s.color+'18', display:'flex', alignItems:'center', justifyContent:'center', fontSize:8, fontWeight:800, color:s.color, flexShrink:0 }}>{s.initials}</div>
+              <div key={s.name} style={{ display:'flex', alignItems:'center', gap:7, padding:'6px 9px', background:'#F8FAFD', borderRadius:8, border:'1px solid #E2E8F2' }}>
+                <div style={{ width:24, height:24, borderRadius:6, background:s.color+'18', display:'flex', alignItems:'center', justifyContent:'center', fontSize:7.5, fontWeight:800, color:s.color, flexShrink:0 }}>{s.initials}</div>
                 <div style={{ flex:1 }}>
-                  <div style={{ fontSize:10, fontWeight:700, color:'#0F1C2E' }}>{s.name}</div>
-                  <div style={{ fontSize:8, color:'#8FA3BC' }}>{s.cat}</div>
+                  <div style={{ fontSize:9.5, fontWeight:700, color:'#0F1C2E' }}>{s.name}</div>
+                  <div style={{ fontSize:7.5, color:'#8FA3BC' }}>{s.cat}</div>
                 </div>
-                <div style={{ fontSize:10, fontWeight:800, color:'#0F1C2E' }}>{s.price}</div>
-                <div style={{ fontSize:7, padding:'2px 7px', borderRadius:5, background:'#e8f7f6', color:'#0f9b8e', fontWeight:700 }}>Neg.</div>
+                <div style={{ fontSize:9.5, fontWeight:800, color:'#0F1C2E' }}>{s.price}</div>
+                <div style={{ fontSize:7, padding:'2px 6px', borderRadius:4, background:'#e8f7f6', color:'#0f9b8e', fontWeight:700 }}>Neg.</div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Right panel — spending chart */}
+        <div style={{ padding:14 }}>
+          <div style={{ fontSize:9, fontWeight:800, color:'#0F1C2E', marginBottom:10 }}>Gasto mensual por categoría</div>
+          {[
+            { cat:'Streaming',  pct:38, amt:'33€',  color:'#E11D48' },
+            { cat:'Software',   pct:45, amt:'39€',  color:'#0078D4' },
+            { cat:'Música',     pct:13, amt:'11€',  color:'#1DB954' },
+            { cat:'Otros',      pct:4,  amt:'4€',   color:'#D97706' },
+          ].map(r => (
+            <div key={r.cat} style={{ marginBottom:9 }}>
+              <div style={{ display:'flex', justifyContent:'space-between', marginBottom:3 }}>
+                <span style={{ fontSize:8, fontWeight:600, color:'#3D5166' }}>{r.cat}</span>
+                <span style={{ fontSize:8, fontWeight:800, color:'#0F1C2E' }}>{r.amt}</span>
+              </div>
+              <div style={{ height:6, background:'#EDF2FA', borderRadius:4, overflow:'hidden' }}>
+                <div style={{ width:`${r.pct}%`, height:'100%', background:r.color, borderRadius:4 }} />
+              </div>
+            </div>
+          ))}
+
+          {/* Mini trend */}
+          <div style={{ marginTop:14, background:'#F8FAFD', borderRadius:9, padding:'10px 12px', border:'1px solid #E2E8F2' }}>
+            <div style={{ fontSize:8, fontWeight:700, color:'#8FA3BC', marginBottom:6 }}>TENDENCIA 6 MESES</div>
+            <svg width="100%" height="36" viewBox="0 0 160 36">
+              <polyline points="0,28 26,22 52,24 78,18 104,20 130,12 160,8" fill="none" stroke="#0f9b8e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <polyline points="0,28 26,22 52,24 78,18 104,20 130,12 160,8 160,36 0,36" fill="rgba(15,155,142,.08)" stroke="none"/>
+              <circle cx="160" cy="8" r="3" fill="#0f9b8e"/>
+            </svg>
           </div>
         </div>
       </div>
