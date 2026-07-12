@@ -1,10 +1,10 @@
 type Variant = 'light' | 'dark'
 type Size = 'sm' | 'md' | 'lg'
 
-const SIZES: Record<Size, { icon: number; wordmark: number; gap: number }> = {
-  sm: { icon: 28, wordmark: 72,  gap: 8  },
-  md: { icon: 38, wordmark: 96,  gap: 10 },
-  lg: { icon: 52, wordmark: 128, gap: 12 },
+const SIZES: Record<Size, { icon: number; wordmarkH: number; gap: number }> = {
+  sm: { icon: 28, wordmarkH: 14, gap: 8  },
+  md: { icon: 38, wordmarkH: 18, gap: 10 },
+  lg: { icon: 52, wordmarkH: 24, gap: 12 },
 }
 
 export function FloowlyIcon({ size = 36 }: { size?: number }) {
@@ -34,11 +34,10 @@ export default function FloowlyLogo({
       <img
         src="/wordmark.png"
         alt="Floowly Money"
-        height={s.icon * 0.55}
         style={{
           display: 'block',
-          objectFit: 'contain',
-          objectPosition: 'left center',
+          height: s.icon,
+          width: 'auto',
           filter: variant === 'dark' ? 'brightness(0) invert(1)' : 'none',
           opacity: variant === 'dark' ? 0.9 : 1,
         }}
